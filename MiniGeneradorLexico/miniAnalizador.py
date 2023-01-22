@@ -30,10 +30,10 @@ class miniLexico:
             elif (asCarac > 47 and asCarac < 58):
                 if(len(identificador)!=0):
                     identificador += caracter
-                    print("identificador", identificador)
-                    real=""
-                    identificador=""
-                    numero=""
+                    #print("identificador", identificador)
+                    #real=""
+                    #identificador=""
+                    #numero=""
                 #if(len(real)!=0):
                     #real += caracter
                 #elif(len(identificador)!=0):
@@ -53,6 +53,16 @@ class miniLexico:
             elif (caracter == " "):
                 if(len(identificador)!=0):
                     print("IDENTIFICADOR", identificador)
+                    real=""
+                    identificador=""
+                    numero=""
+                elif(len(real)!=0):
+                    print("REAL", real)
+                    real=""
+                    identificador=""
+                    numero=""
+                elif(len(numero)!=0):
+                    print("numero", numero)
                     real=""
                     identificador=""
                     numero=""
