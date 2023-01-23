@@ -6,4 +6,4 @@ Seminario de Solucion de Problemas de Traductores de Lenguajes II
 
 Pruebas:
 
-![Cadena](https://github.com/franco-e-s-c/Sem-Traductores2/blob/294e299c62933e90d725041d951d8de15105bf25/Analizador Lexico/imagenes/1.1.png)
+![Cadena](https://github.com/franco-e-s-c/Sem-Traductores2/blob/aff4cf8a4fefa9302861228b0945aa688a07ead4/Analizador%20Lexico/imagenes/1.1.png)
