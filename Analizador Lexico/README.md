@@ -1,6 +1,6 @@
 Silva Chacon Franco Eduardo
 
-Analizador Lexico que identifica enteros, reales, identificadores, operadores de suma, cadenas y tipos de dato realizado en Python sin uso de librerias
+Analizador Lexico que identifica todos los elementos de la tabla de simbolos lexicos realizado en Python sin uso de librerias
 
 Seminario de Solucion de Problemas de Traductores de Lenguajes II
 
