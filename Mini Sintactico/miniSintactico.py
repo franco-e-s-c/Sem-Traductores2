@@ -15,8 +15,6 @@ tlr2 = [[2,0,0,1],
 data = []
 pila = list()
 pilaS = ""
-pila.append("$")
-pila.append(0)
 lexList = list()
 sinList = list()
 fila = 0
@@ -24,11 +22,25 @@ columna = 0
 accion = 0
 elim = 6
 
-class lexico:
-    def __init__(self, fuente, tipo):
+class ElementoPila:
+    def __init__(self, fuente):
         self.fuente = fuente
+
+class Terminal(ElementoPila):
+    def __init__(self, fuente, tipo):
+        super().__init__(fuente)
         self.tipo = tipo
 
+class NoTerminal(ElementoPila):
+    def __init__(self, fuente):
+        super().__init__(fuente)
+
+class Estado(ElementoPila):
+    def __init__(self, fuente):
+        super().__init__(fuente)
+
+pila.append(Terminal("$", 100))
+pila.append(Estado(0))
 
 class miniAnalizador:
     def __init__(self, cadena):
@@ -43,12 +55,12 @@ class miniAnalizador:
             for it in range(0, len(reservadas)):
                 if cad == reservadas[it]:
                     tipoS = tipoR[it]
-                    obj = lexico(cad, tipoS)
+                    obj = Terminal(cad, tipoS)
                     lexList.append(obj)
                     it= it+1 
                     cad = ""
         else:
-            obj = lexico(cad, 0)
+            obj = Terminal(cad, 0)
             lexList.append(obj)
             cad = ""
             
@@ -74,6 +86,7 @@ class miniAnalizador:
             asCarac = ord(caracter)
             if (caracter == '$'):
                 break
+
             elif(skip==True):
                 if(n != cont-1):
                     n=n+1
@@ -82,7 +95,7 @@ class miniAnalizador:
                     skip=False
             elif (asCarac > 64 and asCarac < 91) or (asCarac>96 and asCarac<123): #Comprobamos si el caracter es una letra
                 if(len(real)!=0):
-                    obj = lexico(real, 2)
+                    obj = Terminal(real, 2)
                     lexList.append(obj)
                     print("Real Tipo 2: ", real)
                     real=""
@@ -90,7 +103,7 @@ class miniAnalizador:
                     numero=""
                     identificador += caracter
                 elif(len(numero)!=0):
-                    obj = lexico(numero, 1)
+                    obj = Terminal(numero, 1)
                     lexList.append(obj)
                     print("Entero Tipo 1: ", numero)
                     real=""
@@ -98,7 +111,7 @@ class miniAnalizador:
                     numero=""
                     identificador += caracter
                 elif(len(cadenaS)!=0):
-                    obj = lexico(cadenaS, 3)
+                    obj = Terminal(cadenaS, 3)
                     lexList.append(obj)
                     print("Cadena Tipo 3: ", cadenaS)
                     real=""
@@ -113,7 +126,7 @@ class miniAnalizador:
                 if(len(identificador)!=0):
                     identificador += caracter
                     if(identificador in tipo):
-                        obj = lexico(identificador, 4)
+                        obj = Terminal(identificador, 4)
                         lexList.append(obj)
                         print("TipoDato Tipo 4: ", identificador)
                         identificador=""
@@ -124,12 +137,12 @@ class miniAnalizador:
                             if identificador == reservadas[it]:
                                 tipoS = tipoR[it]
                             it= it+1 
-                        obj = lexico(identificador, tipoS)
+                        obj = Terminal(identificador, tipoS)
                         lexList.append(obj)
                         print("Reservada Tipo "+ tipoS + ":", identificador)
                         identificador=""
                 elif(len(cadenaS)!=0):
-                    obj = lexico(cadenaS, 2)
+                    obj = Terminal(cadenaS, 2)
                     lexList.append(obj)
                     print("Cadena Tipo 3: ", cadenaS)
                     real=""
@@ -152,7 +165,7 @@ class miniAnalizador:
             elif (caracter == " "):
                 if(len(identificador)!=0):
                     if(identificador in tipo):
-                        obj = lexico(identificador, 4)
+                        obj = Terminal(identificador, 4)
                         lexList.append(obj)
                         print("TipoDato Tipo 4: ", identificador)
                         identificador=""
@@ -163,33 +176,33 @@ class miniAnalizador:
                             if identificador == reservadas[it]:
                                 tipoS = tipoR[it]
                             it= it+1 
-                        obj = lexico(identificador, tipoS)
+                        obj = Terminal(identificador, tipoS)
                         lexList.append(obj)
                         print("Reservada Tipo "+ tipoS + ":", identificador)
                         identificador=""
                     else:
-                        obj = lexico(identificador, 0)
+                        obj = Terminal(identificador, 0)
                         lexList.append(obj)
                         print("Identificador Tipo 0: ", identificador)
                         real=""
                         identificador=""
                         numero=""
                 elif(len(real)!=0):
-                    obj = lexico(real, 2)
+                    obj = Terminal(real, 2)
                     lexList.append(obj)
                     print("Real Tipo 2: ", real)
                     real=""
                     identificador=""
                     numero=""
                 elif(len(numero)!=0):
-                    obj = lexico(entero, 1)
+                    obj = Terminal(entero, 1)
                     lexList.append(obj)
                     print("Entero Tipo 1: ", numero)
                     real=""
                     identificador=""
                     numero=""
                 elif(len(cadenaS)!=0):
-                    obj = lexico(cadenaS, 3)
+                    obj = Terminal(cadenaS, 3)
                     lexList.append(obj)
                     print("Cadena Tipo 3: ", cadenaS)
                     real=""
@@ -203,7 +216,7 @@ class miniAnalizador:
                 cont = 0
                 if(len(identificador)!=0):
                     if(identificador in tipo):
-                        obj = lexico(identificador, 4)
+                        obj = Terminal(identificador, 4)
                         lexList.append(obj)
                         print("TipoDato Tipo 4: ", identificador)
                         identificador=""
@@ -214,26 +227,26 @@ class miniAnalizador:
                             if identificador == reservadas[it]:
                                 tipoS = tipoR[it]
                             it= it+1 
-                        obj = lexico(identificador, tipoS)
+                        obj = Terminal(identificador, tipoS)
                         lexList.append(obj)
                         print("Reservada Tipo "+ tipoS + ":", identificador)
                         identificador=""
                     else:
-                        obj = lexico(identificador, 0)
+                        obj = Terminal(identificador, 0)
                         lexList.append(obj)
                         print("Identificador Tipo 0: ", identificador)
                         real=""
                         identificador=""
                         numero=""
                 elif(len(real)!=0):
-                    obj = lexico(real, 2)
+                    obj = Terminal(real, 2)
                     lexList.append(obj)
                     print("Real Tipo 2: ", real)
                     real=""
                     identificador=""
                     numero=""
                 elif(len(numero)!=0):
-                    obj = lexico(numero, 1)
+                    obj = Terminal(numero, 1)
                     lexList.append(obj)
                     print("Entero Tipo 1: ", numero)
                     real=""
@@ -248,7 +261,7 @@ class miniAnalizador:
                         break
                     elif (self.cadena[cadenaCar]=="'") or (self.cadena[cadenaCar]=='"'):
                         skip = True
-                        obj = lexico(cadenaS, 3)
+                        obj = Terminal(cadenaS, 3)
                         lexList.append(obj)
                         print("Cadena Tipo 3: ", cadenaS)
                         real=""
@@ -260,34 +273,34 @@ class miniAnalizador:
 
             elif (caracter == '+') or (caracter == '-'):
                 if(len(numero)!=0):
-                    obj = lexico(numero, 1)
+                    obj = Terminal(numero, 1)
                     lexList.append(obj)
                     print("Entero Tipo 1: ", numero)
                     real=""
                     identificador=""
                     numero=""
-                    #obj = lexico(caracter, 5)
-                    obj = lexico(caracter, 1)
+                    #obj = Terminal(caracter, 5)
+                    obj = Terminal(caracter, 1)
                     lexList.append(obj)
                     print("opSuma Tipo 5: ", caracter)
                 elif(len(real)!=0):
-                    obj = lexico(real, 2)
+                    obj = Terminal(real, 2)
                     lexList.append(obj)
                     print("Real Tipo 2: ", real)
                     real=""
                     identificador=""
                     numero=""
-                    #obj = lexico(caracter, 5)
-                    obj = lexico(caracter, 1)
+                    #obj = Terminal(caracter, 5)
+                    obj = Terminal(caracter, 1)
                     lexList.append(obj)
                     print("opSuma Tipo 5: ", caracter)
                 elif(len(identificador)!=0):
                     if(identificador in tipo):
-                        obj = lexico(identificador, 4)
+                        obj = Terminal(identificador, 4)
                         lexList.append(obj)
                         print("TipoDato Tipo 4: ", identificador)
-                        #obj = lexico(caracter, 5)
-                        obj = lexico(caracter, 1)
+                        #obj = Terminal(caracter, 5)
+                        obj = Terminal(caracter, 1)
                         lexList.append(obj)
                         print("opSuma Tipo 5: ", caracter)
                         identificador=""
@@ -298,58 +311,58 @@ class miniAnalizador:
                             if identificador == reservadas[it]:
                                 tipoS = tipoR[it]
                             it= it+1 
-                        obj = lexico(identificador, tipoS)
+                        obj = Terminal(identificador, tipoS)
                         lexList.append(obj)
                         print("Reservada Tipo "+ tipoS + ":", identificador)
-                        #obj = lexico(caracter, 5)
-                        obj = lexico(caracter, 1)
+                        #obj = Terminal(caracter, 5)
+                        obj = Terminal(caracter, 1)
                         lexList.append(obj)
                         print("opSuma Tipo 5: ", caracter)
                         identificador=""
                     else:
-                        obj = lexico(identificador, 0)
+                        obj = Terminal(identificador, 0)
                         lexList.append(obj)
                         print("Identificador Tipo 0: ", identificador)
                         real=""
                         identificador=""
                         numero=""
-                        #obj = lexico(caracter, 5)
-                        obj = lexico(caracter, 1)
+                        #obj = Terminal(caracter, 5)
+                        obj = Terminal(caracter, 1)
                         lexList.append(obj)
                         print("opSuma Tipo 5: ", caracter)
                 else:
-                    #obj = lexico(caracter, 5)
-                    obj = lexico(caracter, 1)
+                    #obj = Terminal(caracter, 5)
+                    obj = Terminal(caracter, 1)
                     lexList.append(obj)
                     print("opSuma Tipo 5: ", caracter)
             
             elif (caracter == '*') or (caracter == '/'):
                 if(len(numero)!=0):
-                    obj = lexico(numero, 1)
+                    obj = Terminal(numero, 1)
                     lexList.append(obj)
                     print("Entero Tipo 1: ", numero)
                     real=""
                     identificador=""
                     numero=""
-                    obj = lexico(caracter, 6)
+                    obj = Terminal(caracter, 6)
                     lexList.append(obj)
                     print("opMul Tipo 6: ", caracter)
                 elif(len(real)!=0):
-                    obj = lexico(real, 6)
+                    obj = Terminal(real, 6)
                     lexList.append(obj)
                     print("Real Tipo 2: ", real)
                     real=""
                     identificador=""
                     numero=""
-                    obj = lexico(caracter, 6)
+                    obj = Terminal(caracter, 6)
                     lexList.append(obj)
                     print("opMul Tipo 6: ", caracter)
                 elif(len(identificador)!=0):
                     if(identificador in tipo):
-                        obj = lexico(identificador, 4)
+                        obj = Terminal(identificador, 4)
                         lexList.append(obj)
                         print("TipoDato Tipo 4: ", identificador)
-                        obj = lexico(caracter, 6)
+                        obj = Terminal(caracter, 6)
                         lexList.append(obj)
                         print("opMul Tipo 6: ", caracter)
                         identificador=""
@@ -360,38 +373,38 @@ class miniAnalizador:
                             if identificador == reservadas[it]:
                                 tipoS = tipoR[it]
                             it= it+1 
-                        obj = lexico(identificador, tipoS)
+                        obj = Terminal(identificador, tipoS)
                         lexList.append(obj)
                         print("Reservada Tipo "+ tipoS + ":", identificador)
-                        obj = lexico(caracter, 6)
+                        obj = Terminal(caracter, 6)
                         lexList.append(obj)
                         print("opMul Tipo 6: ", caracter)
                         identificador=""
                     else:
-                        obj = lexico(identificador, 0)
+                        obj = Terminal(identificador, 0)
                         lexList.append(obj)
                         print("Identificador Tipo 0: ", identificador)
                         real=""
                         identificador=""
                         numero=""
-                        obj = lexico(caracter, 6)
+                        obj = Terminal(caracter, 6)
                         lexList.append(obj)
                         print("opMul Tipo 6: ", caracter)
                 else:
-                    obj = lexico(caracter, 6)
+                    obj = Terminal(caracter, 6)
                     lexList.append(obj)
                     print("opMul Tipo 6: ", caracter)
 
             elif (caracter == '<') or (caracter == '>') or (caracter == '!'):
                 if(len(numero)!=0):
-                    obj = lexico(numero, 1)
+                    obj = Terminal(numero, 1)
                     lexList.append(obj)
                     print("Entero Tipo 1: ", numero)
                     real=""
                     identificador=""
                     numero=""
                 elif(len(real)!=0):
-                    obj = lexico(real, 2)
+                    obj = Terminal(real, 2)
                     lexList.append(obj)
                     print("Real Tipo 2: ", real)
                     real=""
@@ -399,7 +412,7 @@ class miniAnalizador:
                     numero=""
                 elif(len(identificador)!=0):
                     if(identificador in tipo):
-                        obj = lexico(identificador, 4)
+                        obj = Terminal(identificador, 4)
                         lexList.append(obj)
                         print("TipoDato Tipo 4: ", identificador)
                         identificador=""
@@ -410,12 +423,12 @@ class miniAnalizador:
                             if identificador == reservadas[it]:
                                 tipoS = tipoR[it]
                             it= it+1 
-                        obj = lexico(identificador, tipoS)
+                        obj = Terminal(identificador, tipoS)
                         lexList.append(obj)
                         print("Reservada Tipo "+ tipoS + ":", identificador)
                         identificador=""
                     else:
-                        obj = lexico(identificador, 0)
+                        obj = Terminal(identificador, 0)
                         lexList.append(obj)
                         print("Identificador Tipo 0: ", identificador)
                         real=""
@@ -425,26 +438,26 @@ class miniAnalizador:
                     cont= 1
                     skip = True
                     relac = caracter + self.cadena[i+1]
-                    obj = lexico(relac, 7)
+                    obj = Terminal(relac, 7)
                     lexList.append(obj)
                     print("opRelac Tipo 7: ", relac)
                     cont = 1
                     skip = True
                 else:
-                    obj = lexico(caracter, 7)
+                    obj = Terminal(caracter, 7)
                     lexList.append(obj)
                     print("opRelac Tipo 7: ", caracter)
 
             elif (caracter == '='):
                 if(len(numero)!=0):
-                    obj = lexico(numero, 1)
+                    obj = Terminal(numero, 1)
                     lexList.append(obj)
                     print("Entero Tipo 1: ", numero)
                     real=""
                     identificador=""
                     numero=""
                 elif(len(real)!=0):
-                    obj = lexico(real, 2)
+                    obj = Terminal(real, 2)
                     lexList.append(obj)
                     print("Real Tipo 2: ", real)
                     real=""
@@ -452,7 +465,7 @@ class miniAnalizador:
                     numero=""
                 elif(len(identificador)!=0):
                     if(identificador in tipo):
-                        obj = lexico(identificador, 4)
+                        obj = Terminal(identificador, 4)
                         lexList.append(obj)
                         print("TipoDato Tipo 4: ", identificador)
                         identificador=""
@@ -463,12 +476,12 @@ class miniAnalizador:
                             if identificador == reservadas[it]:
                                 tipoS = tipoR[it]
                             it= it+1 
-                        obj = lexico(identificador, tipoS)
+                        obj = Terminal(identificador, tipoS)
                         lexList.append(obj)
                         print("Reservada Tipo "+ tipoS + ":", identificador)
                         identificador = ""
                     else:
-                        obj = lexico(identificador, 0)
+                        obj = Terminal(identificador, 0)
                         lexList.append(obj)
                         print("Identificador Tipo 0: ", identificador)
                         real=""
@@ -476,26 +489,26 @@ class miniAnalizador:
                         numero=""
                 if (self.cadena[i+1]=="="):
                     relac = caracter + self.cadena[i+1]
-                    obj = lexico(relac, 7)
+                    obj = Terminal(relac, 7)
                     lexList.append(obj)
                     print("opRelac Tipo 7: ", relac)
                     cont = 1
                     skip = True
                 else:
-                    obj = lexico(caracter, 18)
+                    obj = Terminal(caracter, 18)
                     lexList.append(obj)
                     print("opAsignacion Tipo 18: ", caracter)
                 
             elif (caracter == '|'):
                 if(len(numero)!=0):
-                    obj = lexico(numero, 1)
+                    obj = Terminal(numero, 1)
                     lexList.append(obj)
                     print("Entero Tipo 1: ", numero)
                     real=""
                     identificador=""
                     numero=""
                 elif(len(real)!=0):
-                    obj = lexico(real, 2)
+                    obj = Terminal(real, 2)
                     lexList.append(obj)
                     print("Real Tipo 2: ", real)
                     real=""
@@ -503,7 +516,7 @@ class miniAnalizador:
                     numero=""
                 elif(len(identificador)!=0):
                     if(identificador in tipo):
-                        obj = lexico(identificador, 4)
+                        obj = Terminal(identificador, 4)
                         lexList.append(obj)
                         print("TipoDato Tipo 4: ", identificador)
                         identificador=""
@@ -514,12 +527,12 @@ class miniAnalizador:
                             if identificador == reservadas[it]:
                                 tipoS = tipoR[it]
                             it= it+1 
-                        obj = lexico(identificador, tipoS)
+                        obj = Terminal(identificador, tipoS)
                         lexList.append(obj)
                         print("Reservada Tipo "+ tipoS + ":", identificador)
                         identificador=""
                     else:
-                        obj = lexico(identificador, 0)
+                        obj = Terminal(identificador, 0)
                         lexList.append(obj)
                         print("Identificador Tipo 0: ", identificador)
                         real=""
@@ -527,7 +540,7 @@ class miniAnalizador:
                         numero=""
                 if (self.cadena[i+1]=="|"):
                     orV = caracter + self.cadena[i+1]
-                    obj = lexico(orV, 8)
+                    obj = Terminal(orV, 8)
                     lexList.append(obj)
                     print("opOr Tipo 8: ", orV)
                     cont = 1
@@ -537,14 +550,14 @@ class miniAnalizador:
 
             elif (caracter == '&'):
                 if(len(numero)!=0):
-                    obj = lexico(numero, 1)
+                    obj = Terminal(numero, 1)
                     lexList.append(obj)
                     print("Entero Tipo 1: ", numero)
                     real=""
                     identificador=""
                     numero=""
                 elif(len(real)!=0):
-                    obj = lexico(real, 2)
+                    obj = Terminal(real, 2)
                     lexList.append(obj)
                     print("Real Tipo 2: ", real)
                     real=""
@@ -552,7 +565,7 @@ class miniAnalizador:
                     numero=""
                 elif(len(identificador)!=0):
                     if(identificador in tipo):
-                        obj = lexico(identificador, 4)
+                        obj = Terminal(identificador, 4)
                         lexList.append(obj)
                         print("TipoDato Tipo 4: ", identificador)
                         identificador=""
@@ -563,12 +576,12 @@ class miniAnalizador:
                             if identificador == reservadas[it]:
                                 tipoS = tipoR[it]
                             it= it+1 
-                        obj = lexico(identificador, tipoS)
+                        obj = Terminal(identificador, tipoS)
                         lexList.append(obj)
                         print("Reservada Tipo "+ tipoS + ":", identificador)
                         identificador=""
                     else:
-                        obj = lexico(identificador, 0)
+                        obj = Terminal(identificador, 0)
                         lexList.append(obj)
                         print("Identificador Tipo 0: ", identificador)
                         real=""
@@ -576,7 +589,7 @@ class miniAnalizador:
                         numero=""
                 if (self.cadena[i+1]=="&"):
                     andV = caracter + self.cadena[i+1]
-                    obj = lexico(andV, 9)
+                    obj = Terminal(andV, 9)
                     lexList.append(obj)
                     print("opAnd Tipo 9: ", andV)
                     cont = 1
@@ -586,31 +599,31 @@ class miniAnalizador:
 
             elif (caracter == '!'):
                 if(len(numero)!=0):
-                    obj = lexico(numero, 1)
+                    obj = Terminal(numero, 1)
                     lexList.append(obj)
                     print("Entero Tipo 1: ", numero)
                     real=""
                     identificador=""
                     numero=""
-                    obj = lexico(caracter, 10)
+                    obj = Terminal(caracter, 10)
                     lexList.append(obj)
                     print("opNot Tipo 10: ", caracter)
                 elif(len(real)!=0):
-                    obj = lexico(real, 2)
+                    obj = Terminal(real, 2)
                     lexList.append(obj)
                     print("Real Tipo 2: ", real)
                     real=""
                     identificador=""
                     numero=""
-                    obj = lexico(caracter, 10)
+                    obj = Terminal(caracter, 10)
                     lexList.append(obj)
                     print("opNot Tipo 10: ", caracter)
                 elif(len(identificador)!=0):
                     if(identificador in tipo):
-                        obj = lexico(identificador, 4)
+                        obj = Terminal(identificador, 4)
                         lexList.append(obj)
                         print("TipoDato Tipo 4: ", identificador)
-                        obj = lexico(caracter, 10)
+                        obj = Terminal(caracter, 10)
                         lexList.append(obj)
                         print("opNot Tipo 10: ", caracter)
                         identificador=""
@@ -620,22 +633,22 @@ class miniAnalizador:
                             if identificador == reservadas[it]:
                                 tipoS = tipoR[it]
                             it= it+1 
-                        obj = lexico(identificador, tipoS)
+                        obj = Terminal(identificador, tipoS)
                         lexList.append(obj)
                         print("Reservada Tipo "+ tipoS + ":", identificador)
                         identificador = ""
                     else:
-                        obj = lexico(identificador, 0)
+                        obj = Terminal(identificador, 0)
                         lexList.append(obj)
                         print("Identificador Tipo 0: ", identificador)
                         real=""
                         identificador=""
                         numero=""
-                        obj = lexico(caracter, 10)
+                        obj = Terminal(caracter, 10)
                         lexList.append(obj)
                         print("opNot Tipo 10: ", caracter)
                 else:
-                    obj = lexico(caracter, 10)
+                    obj = Terminal(caracter, 10)
                     lexList.append(obj)
                     print("opNot Tipo 10: ", caracter)
 
@@ -647,14 +660,14 @@ class miniAnalizador:
                     it= it+1
 
                 if(len(numero)!=0):
-                    obj = lexico(numero, 1)
+                    obj = Terminal(numero, 1)
                     lexList.append(obj)
                     print("Entero Tipo 1: ", numero)
                     real=""
                     identificador=""
                     numero=""
                 elif(len(real)!=0):
-                    obj = lexico(real, 10)
+                    obj = Terminal(real, 10)
                     lexList.append(obj)
                     print("Real Tipo 2: ", real)
                     real=""
@@ -662,7 +675,7 @@ class miniAnalizador:
                     numero=""
                 elif(len(identificador)!=0):
                     if(identificador in tipo):
-                        obj = lexico(identificador, 4)
+                        obj = Terminal(identificador, 4)
                         lexList.append(obj)
                         print("TipoDato Tipo 4: ", identificador)
                         identificador=""
@@ -673,19 +686,19 @@ class miniAnalizador:
                             if identificador == reservadas[it]:
                                 tipoS = tipoR[it]
                             it= it+1 
-                        obj = lexico(identificador, tipoS)
+                        obj = Terminal(identificador, tipoS)
                         lexList.append(obj)
                         print("Reservada Tipo "+ tipoS + ":", identificador)
                         identificador=""
                         
                     else:
-                        obj = lexico(identificador, 0)
+                        obj = Terminal(identificador, 0)
                         lexList.append(obj)
                         print("Identificador Tipo 0: ", identificador)
                         real=""
                         identificador=""
                         numero=""
-                obj = lexico(caracter, tipoS)
+                obj = Terminal(caracter, tipoS)
                 lexList.append(obj)
                 print("Simbolo Tipo "+ tipoS + ":", caracter)
              
@@ -693,14 +706,14 @@ class miniAnalizador:
             i=i+1            
 
         if(len(real)!=0):
-            obj = lexico(real, 2)
+            obj = Terminal(real, 2)
             lexList.append(obj)
             print("Real Tipo 2", real)
             real=""
             identificador=""
             numero=""
         elif(len(numero)!=0):
-            obj = lexico(numero, 1)
+            obj = Terminal(numero, 1)
             lexList.append(obj)
             print("Entero Tipo 1", numero)
             real=""
@@ -708,7 +721,7 @@ class miniAnalizador:
             numero=""
         elif(len(identificador)!=0):
             if(identificador in tipo):
-                obj = lexico(identificador, 4)
+                obj = Terminal(identificador, 4)
                 lexList.append(obj)
                 print("TipoDato Tipo 4: ", identificador)
                 identificador=""
@@ -719,18 +732,18 @@ class miniAnalizador:
                             if identificador == reservadas[it]:
                                 tipoS = tipoR[it]
                             it= it+1 
-                        obj = lexico(identificador, tipoS)
+                        obj = Terminal(identificador, tipoS)
                         lexList.append(obj)
                         print("Reservada Tipo "+ tipoS + ":", identificador)
                         identificador=""
             else:
-                obj = lexico(identificador, 0)
+                obj = Terminal(identificador, 0)
                 lexList.append(obj)
                 print("Identificador Tipo 0", identificador)
                 real=""
                 identificador=""
                 numero=""
-                obj = lexico("$", 2)
+                obj = Terminal("$", 2)
                 lexList.append(obj)
 
 
@@ -738,11 +751,10 @@ class miniAnalizador:
 print("Ingresa una cadena")
 cadena = input()
 miniAnalizador(cadena).analizar()
-
 for obj in lexList:
     fila = pila[-1]
     columna = obj.tipo
-    accion = tlr2[fila][columna]
+    accion = tlr2[fila.fuente][columna]
    
     if (accion == 0):
         acc = "NADA"
@@ -754,9 +766,9 @@ for obj in lexList:
         acc = "r"+str(abs(accion+1))
 
     for p in pila:
-        pilaS += str(p)
-    pila.append(obj.fuente)
-    pila.append(accion)
+        pilaS += str(p.fuente)
+    pila.append(Terminal(obj.fuente, obj.tipo))
+    pila.append(Estado(accion))
     data.append([pilaS, obj.fuente, acc])
     pilaS = ""
     if acc == "r1":
@@ -764,20 +776,20 @@ for obj in lexList:
         while elim !=0:
             pila.pop()
             elim -=1
-        pila.append("E")
-        pila.append(str(abs(accion+1)))
+        pila.append(NoTerminal("E"))    
+        pila.append(Estado(str(abs(accion+1))))
         for p in pila:
-            pilaS += str(p)
+            pilaS += str(p.fuente)
         data.append([pilaS, "$", acc])
     if acc == "r2":
         elim = len(pila)-2
         while elim !=0:
             pila.pop()
             elim -=1
-        pila.append("E")
-        pila.append(str(abs(accion+1)))
+        pila.append(NoTerminal("E"))    
+        pila.append(Estado(str(abs(accion+1))))
         for p in pila:
-            pilaS += str(p)
+            pilaS += str(p.fuente)
         data.append([pilaS, "$", acc])
 
 print(tabulate(data, headers=["Pila", "Entrada", "Salida"]))
