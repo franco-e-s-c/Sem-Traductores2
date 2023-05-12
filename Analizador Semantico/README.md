@@ -7,5 +7,5 @@ Seminario de Solucion de Problemas de Traductores de Lenguajes II
 
 Pruebas:
 
-![Cadena](https://github.com/franco-e-s-c/Sem-Traductores2/blob/6c73afd3d979dd42af9479522f68998623035244/Analizador%20Semantico/imagenes/1.1.png)
-![Cadena](https://github.com/franco-e-s-c/Sem-Traductores2/blob/6c73afd3d979dd42af9479522f68998623035244/Analizador%20Semantico/imagenes/1.2.png)
+![Cadena](https://github.com/franco-e-s-c/Sem-Traductores2/blob/cb576ebd5cc99a9a121822ba97634227f7c6e6ab/Analizador%20Semantico/imagenes/1.1.png)
+![Cadena](https://github.com/franco-e-s-c/Sem-Traductores2/blob/cb576ebd5cc99a9a121822ba97634227f7c6e6ab/Analizador%20Semantico/imagenes/1.1.png)
