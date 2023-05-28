@@ -34,3 +34,4 @@ De este modo el flujo del programa resulta de la siguiente forma:
 3.- Final y cálculo de resultados
 
 ![Imagen](https://github.com/franco-e-s-c/Sem-Traductores2/blob/72cf9307f7c051c8544863e9f6e97d5f1842febc/ProyectoFin/imagenes/GIF4.gif)
+![Imagen](https://github.com/franco-e-s-c/Sem-Traductores2/blob/f9148507ea335af554058b33f21480a4d4c15331/ProyectoFin/imagenes/imagenRes.png)
